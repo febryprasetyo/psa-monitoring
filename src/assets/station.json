@@ -1,0 +1,79 @@
+[
+  {
+    "id": 1,
+    "value": 1,
+    "lokasi": "RSUD KENDARI ",
+    "pressure": 0.0,
+    "flowCentral": 0.0,
+    "flowTabung": 0.0,
+    "flowTotal": 0.0,
+    "purity": 0.0,
+    "running": 3600
+  },
+  {
+    "id": 2,
+    "value": 0,
+    "lokasi": "RSUD KENDARI ",
+    "pressure": 0.0,
+    "flowCentral": 0.0,
+    "flowTabung": 0.0,
+    "flowTotal": 0.0,
+    "purity": 0.0,
+    "running": 3600
+  },
+  {
+    "id": 3,
+    "value": 1,
+    "lokasi": "RSUD KENDARI ",
+    "pressure": 0.0,
+    "flowCentral": 0.0,
+    "flowTabung": 0.0,
+    "flowTotal": 0.0,
+    "purity": 0.0,
+    "running": 3600
+  },
+  {
+    "id": 4,
+    "value": 0,
+    "lokasi": "RSUD KENDARI ",
+    "pressure": 0.0,
+    "flowCentral": 0.0,
+    "flowTabung": 0.0,
+    "flowTotal": 0.0,
+    "purity": 0.0,
+    "running": 3600
+  },
+  {
+    "id": 5,
+    "value": 1,
+    "lokasi": "RSUD KENDARI ",
+    "pressure": 0.0,
+    "flowCentral": 0.0,
+    "flowTabung": 0.0,
+    "flowTotal": 0.0,
+    "purity": 0.0,
+    "running": 3600
+  },
+  {
+    "id": 6,
+    "value": 1,
+    "lokasi": "RSUD KENDARI ",
+    "pressure": 0.0,
+    "flowCentral": 0.0,
+    "flowTabung": 0.0,
+    "flowTotal": 0.0,
+    "purity": 0.0,
+    "running": 3600
+  },
+  {
+    "id": 7,
+    "value": 0,
+    "lokasi": "RSUD KENDARI ",
+    "pressure": 0.0,
+    "flowCentral": 0.0,
+    "flowTabung": 0.0,
+    "flowTotal": 0.0,
+    "purity": 0.0,
+    "running": 3600
+  }
+]
