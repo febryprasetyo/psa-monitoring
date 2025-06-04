@@ -27,11 +27,8 @@ const formSchema = z.object({
   nama_dinas: z.string({
     required_error: "Nama Dinas harus diisi",
   }),
-  api_key: z.string({
-    required_error: "API Key harus diisi",
-  }),
-  secret_key: z.string({
-    required_error: "Secret Key harus diisi",
+  alamat: z.string({
+    required_error: "Alamat Key harus diisi",
   }),
 });
 
@@ -46,9 +43,9 @@ export default function UserForm({ setIsOpen, action, value }: props) {
     resolver: zodResolver(formSchema),
     defaultValues: {
       username: value?.username,
-      nama_dinas: value?.nama_dinas,
-      api_key: value?.api_key,
-      secret_key: value?.secret_key,
+      alamat: value?.alamat || "",
+      nama_dinas: value?.nama_dinas || "",
+      password: value?.password || "",
     },
   });
 
@@ -151,18 +148,18 @@ export default function UserForm({ setIsOpen, action, value }: props) {
           />
           <FormField
             control={form.control}
-            name="api_key"
+            name="alamat"
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel>API Key</FormLabel>
+                <FormLabel>Alamat</FormLabel>
                 <FormControl>
-                  <Input {...field} placeholder="Masukan API Key..." />
+                  <Input {...field} placeholder="Masukan Alamat..." />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-          <FormField
+          {/* <FormField
             control={form.control}
             name="secret_key"
             render={({ field }) => (
@@ -174,7 +171,7 @@ export default function UserForm({ setIsOpen, action, value }: props) {
                 <FormMessage />
               </FormItem>
             )}
-          />
+          /> */}
         </div>
         <div className="flex gap-3 pt-5">
           <Button

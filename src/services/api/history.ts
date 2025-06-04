@@ -45,14 +45,14 @@ export const getHistoryList = async ({
   }
 
   if (stationFilter && stationFilter !== "all") {
-    params.set("namaStasiun", stationFilter);
+    params.set("id_mesin", stationFilter);
   }
 
   params.set("limit", limit);
   const offset = (parseInt(page) - 1) * parseInt(limit);
   params.set("offset", offset.toString());
   const res = await axiosInstance.get<HistoryResponse>(
-    `/api/data/mqtt/list?${params.toString()}`,
+    `/api/mqtt/list?${params.toString()}`,
     {
       headers: {
         Authorization: `Bearer ${cookie}`,

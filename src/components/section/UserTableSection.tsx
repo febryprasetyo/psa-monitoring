@@ -37,12 +37,12 @@ export default function UserTableSection({ cookie }: Props) {
       header: "Nama Dinas",
     },
     {
-      accessorKey: "api_key",
-      header: "API Key",
+      accessorKey: "alamat",
+      header: "alamat",
     },
     {
-      accessorKey: "secret_key",
-      header: "Secret Key",
+      accessorKey: "is_active",
+      header: "Status",
     },
   ];
 

@@ -3,7 +3,7 @@ import axios, { AxiosResponse } from "axios";
 
 export const getUserList = async (accessToken: string) => {
   const res = await axiosInstance.post<UserResponse>(
-    `/api/data/user/list`,
+    `/api/mqtt/user/list`,
     {
       limit: 1000,
       offset: 0,
@@ -21,8 +21,7 @@ type AddUserRequest = {
   username: string;
   password: string;
   nama_dinas: string;
-  api_key: string;
-  secret_key: string;
+  alamat: string;
 };
 
 type AddUserResponse = MutateDataResponse | undefined;
@@ -33,7 +32,7 @@ export const addUserList = async (
 ): Promise<AddUserResponse> => {
   try {
     const res: AxiosResponse<MutateDataResponse> = await axiosInstance.post(
-      `/api/data/user/create`,
+      `/api/mqtt/user/create`,
       {
         ...data,
       },
@@ -57,8 +56,7 @@ type EditUserRequest = {
   username: string;
   password: string;
   nama_dinas: string;
-  api_key: string;
-  secret_key: string;
+  alamat: string;
 };
 
 export const editUserList = async (
@@ -67,7 +65,7 @@ export const editUserList = async (
 ): Promise<AddUserResponse> => {
   try {
     const res: AxiosResponse<MutateDataResponse> = await axiosInstance.post(
-      `/api/data/user/update`,
+      `/api/mqtt/user/update`,
       {
         ...data,
       },
@@ -92,7 +90,7 @@ export const DeleteUserList = async (
 ) => {
   try {
     const res: AxiosResponse<MutateDataResponse> = await axiosInstance.post(
-      `/api/data/user/remove`,
+      `/api/mqtt/user/remove`,
       {
         id: id,
       },

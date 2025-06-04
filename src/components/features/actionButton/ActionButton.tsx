@@ -22,14 +22,20 @@ import { useAuthStore } from "@/services/store";
 type props = {
   action: "edit" | "add";
   type: "user" | "device" | "station";
-  data: TableData;
+  data: TableData & { id_mesin?: string }; // Ensure id_mesin is optional and included
 };
 
 export default function ActionButton({ action, data, type }: props) {
   const queryClient = useQueryClient();
   const accessToken = useAuthStore((state) => state?.user?.token?.access_token);
   const deleteMutation = useMutation({
-    mutationFn: async (id: string | number): Promise<void> => {
+    mutationFn: async ({
+      id,
+      id_mesin,
+    }: {
+      id: string | number;
+      id_mesin?: string;
+    }): Promise<void> => {
       if (type === "user") {
         return DeleteUserList(id, accessToken as string);
       }
@@ -37,7 +43,10 @@ export default function ActionButton({ action, data, type }: props) {
         return DeleteStationList(id, accessToken as string);
       }
       if (type === "device") {
-        return DeleteDeviceList(id, accessToken as string);
+        if (id_mesin) {
+          return DeleteDeviceList(id_mesin, accessToken as string);
+        }
+        throw new Error("id_mesin is required for deleting a device.");
       }
     },
     onError: (error) => {
@@ -59,7 +68,11 @@ export default function ActionButton({ action, data, type }: props) {
   });
 
   const handleDelete = () => {
-    deleteMutation.mutate(data.id);
+    if (type === "device") {
+      deleteMutation.mutate({ id: data.id, id_mesin: data.id_mesin });
+    } else {
+      deleteMutation.mutate({ id: data.id });
+    }
   };
 
   return (

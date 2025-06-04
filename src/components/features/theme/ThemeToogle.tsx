@@ -7,7 +7,7 @@ type Props = {};
 export default function ThemeToogle({}: Props) {
   const { setTheme, theme } = useTheme();
   const handleClick = () => {
-    setTheme(theme === "dark" ? "light" : "dark");
+    setTheme(theme === "dark" ? "light" : "light");
   };
   //  button untuk toggle theme
   return (

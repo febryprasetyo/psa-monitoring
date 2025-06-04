@@ -6,6 +6,7 @@ import {
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import { CheckCircle2, XCircle } from "lucide-react"; // ikon centang hijau
 
 import {
   Table,
@@ -64,19 +65,34 @@ export function DataTable<TData, TValue>({
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => {
+                    const isStatusColumn = cell.column.id === "is_active";
+                    const value = cell.getValue();
+                    const isTrue =
+                      value === true || value === "true" || value === 1;
+
                     return (
                       <TableCell
                         key={cell.id}
-                        className={`${cell.column.id == "id" ? "font-semibold" : ""}`}
+                        className={
+                          cell.column.id === "id" ? "font-semibold" : ""
+                        }
                       >
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext(),
+                        {isStatusColumn ? (
+                          isTrue ? (
+                            <CheckCircle2 className="h-5 w-5 text-green-500" />
+                          ) : (
+                            <XCircle className="h-5 w-5 text-red-500" />
+                          )
+                        ) : (
+                          flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext(),
+                          )
                         )}
                       </TableCell>
                     );
                   })}
-                  <TableCell>
+                  <TableCell className="w-20">
                     <ActionButton
                       action="edit"
                       type={type}

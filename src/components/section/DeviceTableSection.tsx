@@ -29,21 +29,25 @@ export default function DeviceTableSection({ cookie }: Props) {
       header: "ID",
     },
     {
-      accessorKey: "nama_stasiun",
-      header: "Nama Stasiun",
+      accessorKey: "nama_dinas",
+      header: "Nama Dinas",
     },
+    // {
+    //   accessorKey: "dinas_id",
+    //   header: "ID Dinas",
+    // },
 
     {
       accessorKey: "id_mesin",
       header: "ID Mesin",
     },
     {
-      accessorKey: "dinas_id",
-      header: "ID Dinas",
+      accessorKey: "alamat",
+      header: "Alamat",
     },
     {
-      accessorKey: "nama_dinas",
-      header: "Nama Dinas",
+      accessorKey: "manufacture",
+      header: "Manufacture",
     },
   ];
 

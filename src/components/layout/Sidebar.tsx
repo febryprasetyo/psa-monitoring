@@ -41,6 +41,7 @@ export default function Sidebar() {
     return null;
   }
 
+  // console.log("user", user?.user_data?.role_id);
   return (
     <aside
       className={`bg-side-panel fixed bottom-0 top-0 z-20 h-screen transition-all  duration-300 ease-in-out dark:text-white ${
@@ -69,28 +70,29 @@ export default function Sidebar() {
                 to="/dashboard"
               />
               <TooltipComponents
-                content="Database"
+                content="History"
                 to="/database"
                 pathname={pathname}
-                Icon={Database}
+                Icon={History}
               />
-              <TooltipComponents
+              {/* <TooltipComponents
                 content="History"
                 to="/history"
                 pathname={pathname}
                 Icon={History}
-              />
+              /> */}
             </div>
             {/* Link Client Hanya Akan di Render Ketika role = Admin */}
-            {user?.user_data?.role_name === "Admin" ? (
+
+            {user?.user_data?.role_id === "adm" ? (
               <div className="space-y-2">
                 <p className="text-center text-sm dark:text-white">Admin</p>
-                <TooltipComponents
+                {/* <TooltipComponents
                   content="Stasiun"
                   to="/stasiun"
                   pathname={pathname}
                   Icon={Settings}
-                />
+                /> */}
                 <TooltipComponents
                   content="User"
                   to="/user"

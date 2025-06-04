@@ -7,7 +7,7 @@
 }
 
 .bg-dashboard {
-  @apply bg-[url(https://demos.creative-tim.com/vision-ui-dashboard-chakra/static/media/background-body-admin.9a5703c1.png)] bg-cover bg-center bg-no-repeat;
+  @apply bg-[url('/assets/img/background-body-admin.jpg')] bg-cover bg-center bg-no-repeat;
 }
 
 #table::-webkit-scrollbar {
@@ -47,8 +47,8 @@
   border-radius: 20px;
   background: linear-gradient(
       127.09deg,
-      rgba(6, 11, 40, 0.94) 19.41%,
-      rgba(10, 14, 35, 0.49) 76.65%
+      rgba(13, 27, 95, 0.94) 19.41%,
+      rgba(2, 20, 112, 0.603) 76.65%
     )
     border-box;
 }

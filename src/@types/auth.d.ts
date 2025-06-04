@@ -7,6 +7,8 @@ interface UserData {
   is_active: boolean;
   role_id: string;
   role_name: string;
+  alamat: string;
+  nama_dinas: string;
 }
 
 interface Token {

@@ -45,7 +45,7 @@ export const getDatabaseList = async ({
   }
 
   if (stationFilter && stationFilter !== "all") {
-    params.append("namaStasiun", stationFilter);
+    params.append("id_mesin", stationFilter);
   }
 
   params.append("limit", limit);
@@ -53,7 +53,7 @@ export const getDatabaseList = async ({
   params.append("offset", offset.toString());
 
   const res = await axiosInstance.get<DatabaseResponse>(
-    `/api/data/klhk/list?${params.toString()}`,
+    `/api/mqtt/list?${params.toString()}`,
     {
       headers: {
         Authorization: `Bearer ${cookie}`,

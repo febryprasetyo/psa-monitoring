@@ -6,6 +6,8 @@ import { deleteCookie, setCookie } from "cookies-next";
 import { toast } from "@/components/ui/use-toast";
 import { AxiosError } from "axios";
 
+const sevenDays = 7 * 24 * 60 * 60 * 1000;
+
 export const useAuthStore = create<TAuthStore>()(
   persist(
     (set, get) => ({
@@ -16,7 +18,7 @@ export const useAuthStore = create<TAuthStore>()(
           if (res?.data?.success) {
             set(() => ({ user: res.data }));
             setCookie("token", res?.data?.token?.access_token, {
-              expires: new Date(new Date().getTime() + 60 * 60 * 1000),
+              expires: new Date(Date.now() + sevenDays),
             });
             toast({
               title: "Success",

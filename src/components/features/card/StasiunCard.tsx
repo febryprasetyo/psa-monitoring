@@ -11,7 +11,7 @@ type Props = {
   flowCentral: string | number;
   flowTotal: string | number;
   running: string | number;
-  purity: string | number;
+  purity: number;
   value: string | number;
 };
 
@@ -27,14 +27,15 @@ export default function StasiunCard({
   value,
 }: Props) {
   return (
-    <Link href={`/monitoring/${id}`} data-testid="station-card">
+    // <Link href={`/monitoring/${id}`} data-testid="station-card">
+    <Link href={`/#`} data-testid="station-card">
       <div className="bg-card h-full w-full overflow-hidden rounded-lg px-5 py-2">
         <div className="flex items-center justify-between gap-5">
           <h2 className="line-clamp-1 text-lg font-semibold text-slate-100">
             {lokasi}
           </h2>
           <div className="h-5 w-5">
-            {value != 0 ? (
+            {value != "mati" ? (
               <ArrowUpCircle className=" text-green-500" />
             ) : (
               <ArrowDownCircle className="text-red-500" />
@@ -42,7 +43,7 @@ export default function StasiunCard({
           </div>
         </div>
         <div className="flex items-center justify-between gap-5 text-slate-300">
-          <p className="">{value != 0 ? "Running" : "Off"}</p>
+          <p className="">{value != "mati" ? "Running" : "Off"}</p>
           <p className=" text-end  ">{value != 0 ? running : "00"} H</p>
         </div>
         <div className="line-space mt-2"></div>

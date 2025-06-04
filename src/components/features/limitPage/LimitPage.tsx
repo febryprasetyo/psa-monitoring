@@ -26,13 +26,13 @@ export default function LimitPage() {
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
-          <SelectItem value={"5"} data-testid="limit-5">
-            5
-          </SelectItem>
-          <SelectItem value={"10"} defaultChecked>
+          <SelectItem value={"10"} data-testid="limit-10">
             10
           </SelectItem>
-          <SelectItem value={"20"}>20</SelectItem>
+          <SelectItem value={"20"} defaultChecked>
+            20
+          </SelectItem>
+          <SelectItem value={"50"}>50</SelectItem>
         </SelectGroup>
       </SelectContent>
     </Select>

@@ -129,18 +129,20 @@ export default function HistorySection({ cookie, searchParams }: Props) {
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Pilih Stasiun" />
             </SelectTrigger>
-            <SelectContent>
+            {/* <SelectContent>
               <SelectGroup>
                 <SelectItem value="all" defaultChecked>
                   Semua Stasiun
                 </SelectItem>
-                {stationQuery?.data?.data?.values.map((item, index) => (
-                  <SelectItem key={index} value={item.nama_stasiun}>
-                    {item.nama_stasiun}
-                  </SelectItem>
-                ))}
+                {stationQuery?.data?.data?.values.map(
+                  (item: { nama_stasiun: string }, index: number) => (
+                    <SelectItem key={index} value={item.nama_stasiun}>
+                      {item.nama_stasiun}
+                    </SelectItem>
+                  ),
+                )}
               </SelectGroup>
-            </SelectContent>
+            </SelectContent> */}
           </Select>
           <ExportForm
             isOpen={isOpen}
@@ -178,7 +180,7 @@ export default function HistorySection({ cookie, searchParams }: Props) {
           />
         </div>
       </div>
-      <div className="rounded-xl bg-white p-5 shadow dark:bg-darkSecondary">
+      {/* <div className="rounded-xl bg-white p-5 shadow dark:bg-darkSecondary">
         {dbQuery?.data?.success && (
           <>
             <Table>
@@ -254,7 +256,7 @@ export default function HistorySection({ cookie, searchParams }: Props) {
             </p>
           </div>
         )}
-      </div>
+      </div> */}
     </section>
   );
 }

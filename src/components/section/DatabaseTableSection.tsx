@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getDatabaseList } from "@/services/api/database";
+import { getStationList } from "@/services/api/station"; // Asumsi endpoint ini ada
 import {
   Table,
   TableBody,
@@ -15,7 +16,6 @@ import { DatePicker } from "../features/form/DatePicker";
 import { format, parseISO, subMonths } from "date-fns";
 import { Button } from "../ui/button";
 import { Trash } from "lucide-react";
-import { getStationList } from "@/services/api/station";
 import {
   Select,
   SelectContent,
@@ -24,8 +24,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { ReusablePagination } from "../features/pagination";
 import ExportForm from "../features/export/ExportForm";
+import { ReusablePagination } from "../features/pagination";
 
 type Props = {
   cookie: string;
@@ -50,8 +50,14 @@ export default function DatabaseTableSection({ cookie, limit, page }: Props) {
           endDate: format(parseISO(endDate.toISOString()), "yyyy-MM-dd"),
         }
       : null;
+
   const hourQueryKey =
     dateQueryKey && startHour && endHour ? { startHour, endHour } : null;
+
+  const monitoringQuery = useQuery({
+    queryKey: ["monitoring", cookie],
+    queryFn: () => getStationList(cookie), // Harus return list nama_dinas + id_mesin
+  });
 
   const dbQuery = useQuery({
     queryKey: [
@@ -66,26 +72,18 @@ export default function DatabaseTableSection({ cookie, limit, page }: Props) {
         limit,
       },
     ],
-    queryFn: () => {
-      return getDatabaseList({
+    queryFn: () =>
+      getDatabaseList({
         cookie,
         startHour,
         endHour,
         startDate,
         endDate,
-        stationFilter,
+        stationFilter: stationFilter === "all" ? "" : stationFilter, // Jika filter "all", kirimkan string kosong
         page,
         limit,
-      });
-    },
+      }),
     refetchInterval: false,
-  });
-
-  const stationQuery = useQuery({
-    queryKey: ["station"],
-    queryFn: () => {
-      return getStationList(cookie);
-    },
   });
 
   const handleResetFilter = () => {
@@ -96,40 +94,39 @@ export default function DatabaseTableSection({ cookie, limit, page }: Props) {
     setStationFilter("all");
   };
 
+  console.log("dbQuery", dbQuery?.data?.data?.values);
+  const totaldata = dbQuery?.data?.total ? parseInt(dbQuery?.data?.total) : 0;
+  console.log(totaldata);
   return (
     <section className="space-y-5">
       <div className="flex w-full items-start justify-between">
-        <h1 className="text-3xl font-semibold">Integrasi Data Onlimo</h1>
+        <h1 className="text-3xl font-semibold">History</h1>
         <div className="flex w-full flex-wrap-reverse items-end justify-end gap-5">
           <LimitPage />
           <Select
             value={stationFilter}
-            onValueChange={(value: string) => {
-              setStationFilter(value);
-            }}
+            onValueChange={(value: string) => setStationFilter(value)}
             defaultValue="all"
           >
-            <SelectTrigger className="w-[180px]" data-testid="station-filter">
-              <SelectValue placeholder="Pilih Stasiun" />
+            <SelectTrigger className="w-[200px]">
+              <SelectValue placeholder="Pilih Dinas" />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectItem value="all" defaultChecked>
-                  Semua Stasiun
-                </SelectItem>
-                {stationQuery?.data?.data?.values.map((item, index) => (
-                  <SelectItem
-                    key={index}
-                    value={item.nama_stasiun}
-                    data-testid={`station-filter-${item.nama_stasiun}`}
-                  >
-                    {item.nama_stasiun}
-                  </SelectItem>
-                ))}
+                <SelectItem value="all">Semua Dinas</SelectItem>
+                {monitoringQuery?.data?.data?.map(
+                  (
+                    item: { id_mesin: string; nama_dinas: string },
+                    idx: number,
+                  ) => (
+                    <SelectItem key={idx} value={item.id_mesin}>
+                      {item.nama_dinas}
+                    </SelectItem>
+                  ),
+                )}
               </SelectGroup>
             </SelectContent>
           </Select>
-
           <ExportForm
             token={cookie}
             type="database"
@@ -138,6 +135,7 @@ export default function DatabaseTableSection({ cookie, limit, page }: Props) {
           />
         </div>
       </div>
+
       <div className="flex flex-wrap justify-end gap-5">
         <div className="flex items-end">
           <Button
@@ -171,105 +169,68 @@ export default function DatabaseTableSection({ cookie, limit, page }: Props) {
           />
         </div>
       </div>
-      <div className="rounded-xl bg-white p-5 shadow dark:bg-darkSecondary">
+
+      <div className="rounded-xl bg-white p-5 shadow ">
+        {dbQuery?.isLoading && (
+          <div className="flex h-[400px] animate-pulse items-center justify-center">
+            <p className="text-lg">Memuat data...</p>
+          </div>
+        )}
         {dbQuery?.data?.success && (
           <>
             <Table>
               <TableHeader>
                 <TableRow>
                   <TableHead>No</TableHead>
-                  <TableHead className="min-w-[180px]">ID Stasiun</TableHead>
-                  <TableHead className="min-w-[150px]">Tanggal</TableHead>
-                  <TableHead>Jam</TableHead>
-                  <TableHead className="min-w-[100px]">Suhu</TableHead>
-                  <TableHead>TDS</TableHead>
-                  <TableHead>DO</TableHead>
-                  <TableHead>PH</TableHead>
-                  <TableHead>Turbidity</TableHead>
-                  <TableHead>Kedalaman</TableHead>
-                  <TableHead>Nitrat</TableHead>
-                  <TableHead>Amonia</TableHead>
-                  <TableHead>COD</TableHead>
-                  <TableHead>BOD</TableHead>
-                  <TableHead>TSS</TableHead>
+                  <TableHead>ID Mesin</TableHead>
+                  <TableHead>Nama Dinas</TableHead>
+                  <TableHead>Tanggal</TableHead>
+                  <TableHead>Oxygen Purity</TableHead>
+                  <TableHead>O2 Tank</TableHead>
+                  <TableHead>Flow Meter</TableHead>
+                  <TableHead>Flow Meter 2</TableHead>
+                  <TableHead>Total Flow</TableHead>
+                  <TableHead>Running Time</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {dbQuery?.data?.data?.map((item, index) => {
-                  const { data }: { data: payload } = JSON.parse(item?.payload);
-                  return (
-                    <TableRow key={index} data-testid="data-table">
+                {Array.isArray(dbQuery?.data?.data?.values) &&
+                  dbQuery?.data?.data?.values.map((row: any, index: number) => (
+                    <TableRow key={index}>
                       <TableCell>
-                        {page == "1"
-                          ? index + 1
-                          : (parseInt(page) - 1) * parseInt(limit) +
-                            (index + 1)}
+                        {(parseInt(page) - 1) * parseInt(limit) + index + 1}
                       </TableCell>
-                      <TableCell className="w-[200px]">
-                        {data.IDStasiun == undefined ? "-" : data.IDStasiun}
-                      </TableCell>
+                      <TableCell>{row.id_mesin}</TableCell>
+                      <TableCell>{row.nama_dinas}</TableCell>
                       <TableCell>
-                        {data.Tanggal == undefined ? "-" : data.Tanggal}
+                        {format(
+                          parseISO(row.waktu_mesin),
+                          "dd/MM/yyyy HH:mm:ss",
+                        )}
                       </TableCell>
-                      <TableCell>
-                        {data.Jam == undefined ? "-" : data.Jam}
-                      </TableCell>
-                      <TableCell>
-                        {data.Suhu == undefined ? "-" : data.Suhu}
-                      </TableCell>
-                      <TableCell>
-                        {data.TDS == undefined ? "-" : data.TDS}
-                      </TableCell>
-                      <TableCell>
-                        {data.DO == undefined ? "-" : data.DO}
-                      </TableCell>
-                      <TableCell>
-                        {data.PH == undefined ? "-" : data.PH}
-                      </TableCell>
-                      <TableCell>
-                        {data.Turbidity == undefined ? "-" : data.Turbidity}
-                      </TableCell>
-                      <TableCell>
-                        {data.Kedalaman == undefined ? "-" : data.Kedalaman}
-                      </TableCell>
-                      <TableCell>
-                        {data.Nitrat == undefined ? "-" : data.Nitrat}
-                      </TableCell>
-                      <TableCell>{data.Amonia ? data.Amonia : "-"}</TableCell>
-                      <TableCell>
-                        {data.COD == undefined ? "-" : data.COD}
-                      </TableCell>
-                      <TableCell>
-                        {data.BOD == undefined ? "-" : data.BOD}
-                      </TableCell>
-                      <TableCell>
-                        {data.TSS == undefined ? "-" : data.TSS}
-                      </TableCell>
+                      <TableCell>{row.oxygen_purity ?? "-"}</TableCell>
+                      <TableCell>{row.o2_tank ?? "-"}</TableCell>
+                      <TableCell>{row.flow_meter ?? "-"}</TableCell>
+                      <TableCell>{row.flow_meter2 ?? "-"}</TableCell>
+                      <TableCell>{row.total_flow ?? "-"}</TableCell>
+                      <TableCell>{row.running_time ?? "-"}</TableCell>
                     </TableRow>
-                  );
-                })}
+                  ))}
               </TableBody>
             </Table>
-
             <div className="mt-5">
               <ReusablePagination
                 currentPage={parseInt(page)}
-                totalData={Number(dbQuery?.data?.totalData)}
+                totalData={Number(dbQuery?.data?.total)}
                 limit={parseInt(limit)}
               />
             </div>
           </>
         )}
-        {dbQuery?.isPending && (
-          <div className="flex h-[400px] animate-pulse items-center justify-center">
-            <p className="text-lg">Memuat data...</p>
-          </div>
-        )}
-        {!dbQuery?.data?.success && !dbQuery?.isPending && (
+        {!dbQuery?.data?.success && !dbQuery?.isLoading && (
           <div className="flex h-[400px] items-center justify-center">
             <p className="text-red-500">
-              Gagal memuat data: {dbQuery?.error?.message || "Network Error"} ,
-              Coba muat ulang halaman
+              Gagal memuat data: {dbQuery?.error?.message || "Network Error"}
             </p>
           </div>
         )}

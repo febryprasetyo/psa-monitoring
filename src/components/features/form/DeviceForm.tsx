@@ -13,28 +13,36 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { addDeviceList, editDeviceList } from "@/services/api/device";
 import { useAuthStore } from "@/services/store";
+import { getUserList } from "@/services/api/user";
 
 const formSchema = z.object({
   id_mesin: z.string({ required_error: "ID Mesin harus diisi" }),
   dinas_id: z.string({ required_error: "Dinas ID harus diisi" }),
-  nama_stasiun: z.string({ required_error: "Nama Stasiun harus diisi" }),
+  manufacture: z.string({ required_error: "Dinas ID harus diisi" }),
 });
 
 type Props = {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   action: "add" | "edit";
   value?: DeviceTableData;
+  cookie?: string;
 };
-export default function DeviceForm({ setIsOpen, value, action }: Props) {
+
+export default function DeviceForm({
+  setIsOpen,
+  value,
+  action,
+  cookie,
+}: Props) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      id_mesin: value?.id_mesin,
-      dinas_id: value?.dinas_id?.toString(),
-      nama_stasiun: value?.nama_stasiun,
+      id_mesin: value?.id_mesin?.toString() || "", // Default empty string if not available
+      dinas_id: value?.dinas_id?.toString() || "", // Default empty string if not available
+      manufacture: value?.manufacture?.toString() || "", // Default empty string if not available
     },
   });
 
@@ -49,6 +57,7 @@ export default function DeviceForm({ setIsOpen, value, action }: Props) {
           {
             ...data,
             dinas_id: Number(data.dinas_id),
+            id_mesin: data.id_mesin,
           },
           accessToken as string,
         );
@@ -84,6 +93,21 @@ export default function DeviceForm({ setIsOpen, value, action }: Props) {
     },
   });
 
+  // if (isLoading) {
+  //   return <div>Loading...</div>;
+  // }
+
+  // if (isError) {
+  //   return <div>Error loading user list.</div>;
+  // }
+
+  // const dinasOptions = Array.isArray(userListData?.data?.values)
+  //   ? userListData.data.values.map((user) => ({
+  //       value: user.dinas_id,
+  //       label: user.nama_dinas,
+  //     }))
+  //   : [];
+
   const onsubmit = (data: z.infer<typeof formSchema>) => {
     DeviceMutation.mutate(data);
     setIsOpen(false);
@@ -98,25 +122,12 @@ export default function DeviceForm({ setIsOpen, value, action }: Props) {
         <div className="w-full space-y-3">
           <FormField
             control={form.control}
-            name="nama_stasiun"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormLabel>Nama Stasiun</FormLabel>
-                <FormControl>
-                  <Input placeholder="Nama Stasiun" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
             name="id_mesin"
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormLabel>ID Mesin</FormLabel>
                 <FormControl>
-                  <Input placeholder="ID Mesin" type="number" {...field} />
+                  <Input placeholder="ID Mesin" type="text" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -127,9 +138,22 @@ export default function DeviceForm({ setIsOpen, value, action }: Props) {
             name="dinas_id"
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel>Dinas ID</FormLabel>
+                <FormLabel>ID Dinas</FormLabel>
                 <FormControl>
-                  <Input placeholder="Dinas ID" type="number" {...field} />
+                  <Input placeholder="Dinas_id" type="number" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="manufacture"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormLabel>Manufacture</FormLabel>
+                <FormControl>
+                  <Input placeholder="manufacture" type="text" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -146,7 +170,7 @@ export default function DeviceForm({ setIsOpen, value, action }: Props) {
           </Button>
 
           <Button type="submit" className="w-44">
-            {action == "add" ? "Tambah Data" : "Edit Data"}
+            {action === "add" ? "Tambah Data" : "Edit Data"}
           </Button>
         </div>
       </form>

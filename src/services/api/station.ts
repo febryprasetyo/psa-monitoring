@@ -22,19 +22,13 @@ type AddStationRequest = {
 type AddStationResponse = MutateDataResponse | undefined;
 
 export const getStationList = async (accessToken: string) => {
-  const res = await axiosInstance.post<StationResponse>(
-    `/api/data/station/list`,
-    {
-      limit: 1000,
-      offset: 0,
+  const res = await axiosInstance.get(`/api/mqtt/monitoring`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
     },
-    {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    },
-  );
+  });
 
+  // Pastikan bentuknya sesuai, misal res.data.data adalah array
   return res.data;
 };
 

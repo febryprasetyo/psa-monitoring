@@ -3,7 +3,7 @@ import axios, { AxiosResponse } from "axios";
 
 export const getDeviceTableList = async (accessToken: string) => {
   const res = await axiosInstance.post<DeviceTableResponse>(
-    `/api/data/device/list`,
+    `api/mqtt/machine/list`,
     {
       limit: 1000,
       offset: 0,
@@ -22,7 +22,6 @@ export const getDeviceTableList = async (accessToken: string) => {
 type AddDeviceRequest = {
   id_mesin: string;
   dinas_id: number;
-  nama_stasiun: string;
 };
 
 type AddDeviceResponse = MutateDataResponse | undefined;
@@ -33,7 +32,7 @@ export const addDeviceList = async (
 ): Promise<AddDeviceResponse> => {
   try {
     const res: AxiosResponse<MutateDataResponse> = await axiosInstance.post(
-      `/api/data/device/create`,
+      `/api/mqtt/machine/add`,
       {
         ...data,
       },
@@ -58,7 +57,7 @@ export const editDeviceList = async (
 ): Promise<AddDeviceResponse> => {
   try {
     const res: AxiosResponse<MutateDataResponse> = await axiosInstance.post(
-      `/api/data/device/update`,
+      `/api/mqtt/machine/update`,
       {
         id: id || "",
         ...data,
@@ -79,14 +78,14 @@ export const editDeviceList = async (
 };
 
 export const DeleteDeviceList = async (
-  id: string | number,
+  id_mesin: string | number,
   accessToken: string,
 ) => {
   try {
     const res: AxiosResponse<MutateDataResponse> = await axiosInstance.post(
-      `/api/data/device/remove`,
+      `/api/mqtt/machine/remove`,
       {
-        id: id,
+        id_mesin: id_mesin,
       },
       {
         headers: {

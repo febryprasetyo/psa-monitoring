@@ -1,9 +1,11 @@
 interface UserTableData {
   id: number;
   username: string;
-  api_key: string;
-  secret_key: string;
+  alamat: string;
   nama_dinas: string;
+  status: string;
+  password: string;
+  dinas_id: number;
 }
 
 interface UserResponse {
@@ -13,4 +15,12 @@ interface UserResponse {
     total: string;
   };
   statusCode?: number;
+}
+
+interface UserListResponse {
+  success: boolean;
+  data: {
+    values: UserTableData[];
+    total: string;
+  };
 }
