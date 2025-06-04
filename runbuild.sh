@@ -1,0 +1,1 @@
+git pull && npm run build && pm2 start npx --name psa-monitoring -- next start -p 3006
